@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const CONFIG = require('../config/config'); // Ajusta la ruta según tu estructura de archivos
+
 const authorize = (roles) => {
     return (req, res, next) => {
       const usuario = req.usuario;
@@ -10,3 +13,5 @@ const authorize = (roles) => {
       }
     };
   };
+
+  module.exports = authorize;

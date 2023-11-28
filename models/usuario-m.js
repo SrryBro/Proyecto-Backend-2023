@@ -38,26 +38,4 @@ const Usuario = sequelize.define('Usuario', {
   },
 });
 
-Usuario.login = async (email, password) => {
-  try {
-    const usuario = await Usuario.findOne({ where: { email } });
-
-    if (!usuario) {
-      throw new Error('Usuario no encontrado');
-    }
-
-    const contrasenaCorrecta = bcrypt.compareSync(password, usuario.password);
-
-    if (contrasenaCorrecta) {
-      const token = generarToken(usuario);
-      return { token, role: usuario.role };
-    } else {
-      throw new Error('Credenciales inválidas');
-    }
-  } catch (error) {
-    console.error('Error de autenticación en Usuario.login:', error);
-    throw error;
-  }
-}
-
 module.exports = Usuario;

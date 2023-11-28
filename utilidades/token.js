@@ -1,20 +1,27 @@
 const jwt = require('jsonwebtoken');
 const CONFIG = require('../config/config');
-const Usuario = require('../models/usuario-m');
+
 
 // Función para generar un token JWT
 const generarToken = (Usuario) => {
-  const payload = {
-    id: Usuario.id,
-    username: Usuario.username,
-    role: Usuario.role,
-  };
+  try {
+    const payload = {
+      id: Usuario.id,
+      username: Usuario.username,
+      role: Usuario.role,
+    };
 
-  const options = {
-    expiresIn: CONFIG.JWT.EXPIRES_IN,
-  };
+    const options = {
+      expiresIn: CONFIG.JWT.EXPIRES_IN,
+    };
 
-  const token = jwt.sign(payload, CONFIG.JWT.SECRET, options);
-  return token;
+    const token = jwt.sign(payload, CONFIG.JWT.SECRET, options);
+    console.log('Token generado con éxito:', token);
+    return token;
+  } catch (error) {
+    console.error('Error al generar el token:', error);
+    throw error;
+  }
 };
 
+module.exports =  generarToken;

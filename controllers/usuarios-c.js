@@ -94,10 +94,25 @@ const usuariosController = {
   loginUsuario: async (req, res) => {
     const { email, password } = req.body;
     try {
-      console.log('Intento de inicio de sesión:', email, password);
-      const { token, role } = await Usuario.login(email, password);
-      console.log('Inicio de sesión exitoso:', email);
-      res.json({ token, role });
+      const usuario = await Usuario.findOne({ where: { email } });
+  
+      if (!usuario) {
+        throw new Error('Usuario no encontrado');
+      }
+  
+      const contrasenaCorrecta = bcrypt.compareSync(password, usuario.password);
+  
+      if (contrasenaCorrecta) {
+        const token = jwt.sign(
+          { id: usuario.id, username: usuario.username, role: usuario.role },
+          CONFIG.JWT.SECRET,
+          { expiresIn: CONFIG.JWT.EXPIRES_IN }
+        );
+  
+        res.json({ token, role: usuario.role });
+      } else {
+        throw new Error('Credenciales inválidas');
+      }
     } catch (error) {
       console.error('Error de inicio de sesión:', error);
       res.status(401).json({ error: 'Autenticación fallida' });

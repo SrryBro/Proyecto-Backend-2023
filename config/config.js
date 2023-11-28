@@ -1,4 +1,6 @@
-require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
+// config/config.js
+
+require('dotenv').config();
 
 module.exports = {
   DB: {
@@ -15,9 +17,5 @@ module.exports = {
   JWT: {
     SECRET: process.env.JWT_SECRET || 'Proyecto_2023',
     EXPIRES_IN: process.env.JWT_EXPIRES_IN || '60h',
-  },
-
-  OTROS: {
-    // ...
   },
 };
