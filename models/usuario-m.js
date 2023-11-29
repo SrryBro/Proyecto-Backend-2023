@@ -1,9 +1,9 @@
 // models/usuario-m.js
-
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const sequelize = require('../db');
-const { generarToken } = require('../utilidades/token');
+require('dotenv').config();
 
 const Usuario = sequelize.define('Usuario', {
   username: {
@@ -23,19 +23,36 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-}, {
-  hooks: {
-    beforeCreate: async (usuario) => {
-      const saltRounds = 10;
-      usuario.password = await bcrypt.hash(usuario.password, saltRounds);
-    },
-    beforeUpdate: async (usuario) => {
-      if (usuario.changed('password')) {
-        const saltRounds = 10;
-        usuario.password = await bcrypt.hash(usuario.password, saltRounds);
-      }
-    },
-  },
 });
+
+
+
+Usuario.login = async (email, password) => {
+  try {
+    const usuario = await Usuario.findOne({ where: { email } });
+    console.log(usuario)
+    if (!usuario) {
+      throw new Error('Usuario no encontrado');
+    }
+    const contraseñaCorrecta = bcrypt.compareSync(password,usuario.password)
+    console.log('Contraseña almacenada:', usuario.password);
+    console.log('Contraseña ingresada:', password);
+    console.log(contraseñaCorrecta)
+
+    if (contraseñaCorrecta) {
+      const token = jwt.sign(
+        { id: usuario.id, username: usuario.username, role: usuario.role },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN }
+      );
+      return { token, role: usuario.role };
+    } else {
+      throw new Error('Credenciales inválidas');
+    }
+  } catch (error) {
+    console.error('Error de autenticación en Usuario.login:', error);
+    throw error;
+  }
+}
 
 module.exports = Usuario;

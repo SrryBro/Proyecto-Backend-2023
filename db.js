@@ -1,10 +1,8 @@
 // db.js
-
 const { Sequelize } = require('sequelize');
-const { DB } = require('./config/config'); // Importa solo la configuración de la base de datos desde config.js
-
-const sequelize = new Sequelize(DB.DATABASE, DB.USER, DB.PASSWORD, {
-  host: DB.HOST,
+require('dotenv').config();
+const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
   dialect: 'mysql',
 });
 
