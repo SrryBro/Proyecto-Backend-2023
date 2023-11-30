@@ -1,4 +1,4 @@
-const Perfil = require('./perfil-m');
+// models/usuario-m.js
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -53,4 +53,5 @@ Usuario.login = async (email, password) => {
 
 
 
+Usuario.hasOne(Perfil);
 module.exports = Usuario;

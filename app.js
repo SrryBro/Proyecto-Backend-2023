@@ -47,6 +47,13 @@ Usuario.hasOne(Perfil, { unique: true });
 Perfil.belongsTo(Usuario);
 
 
+const Seguidor = require('./models/seguidores-m');
+const Publicacion = require('./models/publicacion-m');
+const Notificacion = require('./models/notificaciones-m');
+const MensajePrivado = require('./models/mensaje-priv-m');
+const Comentario = require('./models/comentarios-m');
+const Amistad = require('./models/amistad-m');
+
 // Sincroniza los modelos con la base de datos
 sequelize.sync()
   .then(() => {
