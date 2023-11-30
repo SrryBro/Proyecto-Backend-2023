@@ -1,9 +1,10 @@
 const Amistad = require('../models/amistad-m');
+const Usuario = require('../models/usuario-m')
 
 const amistadesController = {
   iniciarAmistad: async (req, res) => {
     const { usuario2Id } = req.body;
-    const usuario1Id = req.user.id;
+    const usuario1Id = req.usuario.id;
 
     try {
       const nuevaAmistad = await Amistad.create({ usuario1Id, usuario2Id });

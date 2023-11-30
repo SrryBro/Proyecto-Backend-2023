@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
-const Usuario = require('./usuario-m');
-const Publicacion = require('./publicacion-m');
+
 
 const Comentario = sequelize.define('Comentario', {
   texto: {
@@ -14,8 +13,5 @@ const Comentario = sequelize.define('Comentario', {
     defaultValue: DataTypes.NOW,
   },
 });
-
-Comentario.belongsTo(Usuario);
-Comentario.belongsTo(Publicacion);
 
 module.exports = Comentario;

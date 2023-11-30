@@ -1,9 +1,10 @@
 const Seguidor = require('../models/seguidores-m');
+const Usuario = require('../models/usuario-m')
 
 const seguidoresController = {
   seguirUsuario: async (req, res) => {
     const seguidoId = req.params.usuarioId;
-    const seguidorId = req.user.id;
+    const seguidorId = req.usuario.id;
 
     try {
       const nuevaRelacion = await Seguidor.create({ seguidoId, seguidorId });
@@ -16,7 +17,7 @@ const seguidoresController = {
 
   dejarDeSeguirUsuario: async (req, res) => {
     const seguidoId = req.params.usuarioId;
-    const seguidorId = req.user.id;
+    const seguidorId = req.usuario.id;
 
     try {
       const relacion = await Seguidor.findOne({ where: { seguidoId, seguidorId } });

@@ -1,10 +1,15 @@
+// controllers/comentarios-c.js
 const Comentario = require('../models/comentarios-m');
+const Publicacion = require('../models/publicacion-m');
+const Usuario = require('../models/usuario-m');
+// ...
 
 const comentariosController = {
+
   crearComentario: async (req, res) => {
     const { texto, publicacionId } = req.body;
-    const usuarioId = req.user.id;
-
+    const usuarioId = req.usuario.id;
+    console.log(usuarioId)
     try {
       const nuevoComentario = await Comentario.create({ texto, usuarioId, publicacionId });
       res.status(201).json(nuevoComentario);
@@ -44,6 +49,23 @@ const comentariosController = {
       }
     } catch (error) {
       console.error('Error al eliminar comentario:', error);
+      res.status(500).json({ mensaje: 'Error interno del servidor.' });
+    }
+  },
+
+  obtenerComentariosUsuario: async (req, res) => {
+    const usuarioId = req.usuario.id;
+
+    try {
+      const comentarios = await Comentario.findAll({
+        where: { usuarioId },
+        order: [['fechaCreacion', 'DESC']],
+        include: [{ model: Publicacion }],
+      });
+
+      res.json(comentarios);
+    } catch (error) {
+      console.error('Error al obtener comentarios de usuario:', error);
       res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
   },

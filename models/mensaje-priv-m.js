@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
-const Usuario = require('./usuario-m');
+
 
 const MensajePrivado = sequelize.define('MensajePrivado', {
   contenido: {
@@ -13,8 +13,5 @@ const MensajePrivado = sequelize.define('MensajePrivado', {
     defaultValue: DataTypes.NOW,
   },
 });
-
-MensajePrivado.belongsTo(Usuario, { as: 'Remitente' });
-MensajePrivado.belongsTo(Usuario, { as: 'Destinatario' });
 
 module.exports = MensajePrivado;

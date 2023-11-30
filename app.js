@@ -7,6 +7,10 @@ var logger = require('morgan');
 var usersRouter = require('./routes/usuarios');
 var perfilRouter = require('./routes/perfil')
 var pubRouter = require('./routes/publicacion')
+var comentariosRouter = require('./routes/comentarios')
+var amistadRouter = require('./routes/amistad')
+var seguidorRouter = require('./routes/seguidores')
+var mensajeRouter = require('./routes/mensaje-priv')
 
 var app = express();
 
@@ -23,6 +27,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/usuarios', usersRouter);
 app.use('/perfil', perfilRouter)
 app.use('/publicaciones', pubRouter)
+app.use('/comentarios', comentariosRouter)
+app.use('/amistad', amistadRouter)
+app.use('/seguidores', seguidorRouter)
+app.use('/mensajes', mensajeRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -60,6 +69,26 @@ Perfil.belongsTo(Usuario);
 //Relación usuario/publicación (1:N)
 Usuario.hasMany(Publicacion, { foreignKey: 'usuarioId' });
 Publicacion.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+
+//Relación publicación/comentario
+Publicacion.hasMany(Comentario, { foreignKey: 'publicacionId' });
+Usuario.hasMany(Comentario, { foreignKey: 'usuarioId' });
+Comentario.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+Comentario.belongsTo(Publicacion, { foreignKey: 'publicacionId' });
+
+//Relación de amistad 
+Amistad.belongsTo(Usuario, { as: 'Usuario1', foreignKey: 'usuario1Id' });
+Amistad.belongsTo(Usuario, { as: 'Usuario2', foreignKey: 'usuario2Id' });
+
+//Relaciòn de seguidor
+Seguidor.belongsTo(Usuario, { foreignKey: 'seguidorId', as: 'Seguidor' });
+Seguidor.belongsTo(Usuario, { foreignKey: 'seguidoId', as: 'Seguido' });
+
+// Relaciòn de mensajes privados
+MensajePrivado.belongsTo(Usuario, { foreignKey: 'remitenteId', as: 'Remitente' });
+MensajePrivado.belongsTo(Usuario, { foreignKey: 'destinatarioId', as: 'Destinatario' });
+
+
 
 
 

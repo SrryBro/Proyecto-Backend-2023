@@ -1,9 +1,10 @@
 const MensajePrivado = require('../models/mensaje-priv-m');
-
+const Usuario = require('../models/usuario-m')
 const mensajesPrivadosController = {
+
   enviarMensajePrivado: async (req, res) => {
     const { contenido, destinatarioId } = req.body;
-    const remitenteId = req.user.id;
+    const remitenteId = req.usuario.id;
 
     try {
       const nuevoMensaje = await MensajePrivado.create({ contenido, remitenteId, destinatarioId });
@@ -15,7 +16,7 @@ const mensajesPrivadosController = {
   },
 
   obtenerMensajesPrivadosUsuario: async (req, res) => {
-    const destinatarioId = req.user.id;
+    const destinatarioId = req.usuario.id;
 
     try {
       const mensajes = await MensajePrivado.findAll({
