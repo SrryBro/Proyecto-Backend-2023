@@ -4,7 +4,7 @@ const publicacionesController = require('../controllers/publicacion-c');
 const verificarToken = require('../middleware/authMiddleware');
 
 router.post('/', verificarToken, publicacionesController.crearPublicacion);
-router.get('/usuario/:usuarioId', verificarToken, publicacionesController.obtenerPublicacionesUsuario);
+router.get('/usuario/:id', verificarToken, publicacionesController.obtenerPublicacionesUsuario);
 router.get('/', verificarToken, publicacionesController.obtenerTodasPublicaciones);
 router.get('/:publicacionId', verificarToken, publicacionesController.obtenerPublicacionPorId);
 router.put('/:publicacionId', verificarToken, publicacionesController.actualizarPublicacion);

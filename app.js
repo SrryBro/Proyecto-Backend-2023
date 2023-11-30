@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var usersRouter = require('./routes/usuarios');
 var perfilRouter = require('./routes/perfil')
+var pubRouter = require('./routes/publicacion')
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/usuarios', usersRouter);
 app.use('/perfil', perfilRouter)
+app.use('/publicaciones', pubRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -42,17 +44,25 @@ app.use(function(err, req, res, next) {
 const sequelize = require('./db');
 const Usuario = require('./models/usuario-m'); 
 const Perfil = require('./models/perfil-m')
-
-Usuario.hasOne(Perfil, { unique: true });
-Perfil.belongsTo(Usuario);
-
-
 const Seguidor = require('./models/seguidores-m');
 const Publicacion = require('./models/publicacion-m');
 const Notificacion = require('./models/notificaciones-m');
 const MensajePrivado = require('./models/mensaje-priv-m');
 const Comentario = require('./models/comentarios-m');
 const Amistad = require('./models/amistad-m');
+
+
+
+//Relación usuario/perfil (1:1)
+Usuario.hasOne(Perfil, { unique: true });
+Perfil.belongsTo(Usuario);
+
+//Relación usuario/publicación (1:N)
+Usuario.hasMany(Publicacion, { foreignKey: 'usuarioId' });
+Publicacion.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+
+
+
 
 // Sincroniza los modelos con la base de datos
 sequelize.sync()

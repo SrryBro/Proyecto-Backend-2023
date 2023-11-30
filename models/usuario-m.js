@@ -52,6 +52,4 @@ Usuario.login = async (email, password) => {
 };
 
 
-
-Usuario.hasOne(Perfil);
 module.exports = Usuario;

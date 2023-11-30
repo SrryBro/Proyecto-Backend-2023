@@ -1,9 +1,10 @@
 const Publicacion = require('../models/publicacion-m');
+const Usuario = require('../models/usuario-m')
 
 const publicacionesController = {
   crearPublicacion: async (req, res) => {
     const { contenido } = req.body;
-    const usuarioId = req.user.id;
+    const usuarioId = req.usuario.id;
 
     try {
       const nuevaPublicacion = await Publicacion.create({ contenido, usuarioId });
@@ -15,17 +16,20 @@ const publicacionesController = {
   },
 
   obtenerPublicacionesUsuario: async (req, res) => {
-    const usuarioId = req.params.usuarioId;
-
+    const usuarioId = req.params.id;
+    console.log(usuarioId)
     try {
-      const publicaciones = await Publicacion.findAll({
-        where: { usuarioId },
-        order: [['fechaCreacion', 'DESC']],
+      const usuario = await Usuario.findByPk(usuarioId, {
+        include: [{ model: Publicacion }],
       });
 
-      res.json(publicaciones);
+      if (usuario) {
+        res.json(usuario.Publicacions);
+      } else {
+        res.status(404).json({ error: 'Usuario no encontrado.' });
+      }
     } catch (error) {
-      console.error('Error al obtener publicaciones:', error);
+      console.error('Error al obtener publicaciones de usuario:', error);
       res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
   },
