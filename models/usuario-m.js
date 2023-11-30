@@ -1,4 +1,4 @@
-// models/usuario-m.js
+const Perfil = require('./perfil-m');
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -25,19 +25,15 @@ const Usuario = sequelize.define('Usuario', {
   },
 });
 
-
-
 Usuario.login = async (email, password) => {
   try {
     const usuario = await Usuario.findOne({ where: { email } });
-    console.log(usuario)
+
     if (!usuario) {
       throw new Error('Usuario no encontrado');
     }
-    const contraseñaCorrecta = bcrypt.compareSync(password,usuario.password)
-    console.log('Contraseña almacenada:', usuario.password);
-    console.log('Contraseña ingresada:', password);
-    console.log(contraseñaCorrecta)
+
+    const contraseñaCorrecta = bcrypt.compareSync(password, usuario.password);
 
     if (contraseñaCorrecta) {
       const token = jwt.sign(
@@ -53,6 +49,8 @@ Usuario.login = async (email, password) => {
     console.error('Error de autenticación en Usuario.login:', error);
     throw error;
   }
-}
+};
+
+
 
 module.exports = Usuario;

@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var usersRouter = require('./routes/usuarios');
+var perfilRouter = require('./routes/perfil')
 
 var app = express();
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/usuarios', usersRouter);
+app.use('/perfil', perfilRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -39,6 +41,11 @@ app.use(function(err, req, res, next) {
 // Configuración de Sequelize y modelos
 const sequelize = require('./db');
 const Usuario = require('./models/usuario-m'); 
+const Perfil = require('./models/perfil-m')
+
+Usuario.hasOne(Perfil, { unique: true });
+Perfil.belongsTo(Usuario);
+
 
 // Sincroniza los modelos con la base de datos
 sequelize.sync()
